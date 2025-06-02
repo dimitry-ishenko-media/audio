@@ -1,11 +1,16 @@
 # lib
 
+find_package(ALSA REQUIRED)
+
 set(HEADERS
+    audio++/error.hpp
     audio++/mixer.hpp
 )
 set(OVERALL_HEADER audio++.hpp)
 
 set(SOURCES
+    error.cpp
+    internal.cpp
     mixer.cpp
 )
 
@@ -34,7 +39,7 @@ foreach(target ${name}_objects ${name}_static ${name}_shared)
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
-    #target_link_libraries(${target} PUBLIC Qt6::Core Qt6::Widgets)
+    target_link_libraries(${target} PUBLIC ALSA::ALSA)
 endforeach()
 
 add_library(${name}::${name}_static ALIAS ${name}_static)

@@ -5,4 +5,5 @@
 // Distributed under the GNU GPL license. See the LICENSE.md file for details.
 
 ////////////////////////////////////////////////////////////////////////////////
-#include <audio++/error.hpp>
+#define MINIAUDIO_IMPLEMENTATION
+#include <miniaudio.h>
