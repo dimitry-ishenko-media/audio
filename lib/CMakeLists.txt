@@ -5,6 +5,7 @@ find_package(ALSA REQUIRED)
 set(HEADERS
     audio++/error.hpp
     audio++/mixer.hpp
+    audio++/span.hpp
     audio++/types.hpp
 )
 set(OVERALL_HEADER audio++.hpp)
