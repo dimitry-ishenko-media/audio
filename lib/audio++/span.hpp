@@ -12,45 +12,13 @@
 #include "audio++/types.hpp"
 
 #include <array>
-#include <cstdint>
 #include <iterator>
 #include <memory> // std::to_address
 #include <ranges>
-#include <type_traits>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace audio
 {
-
-namespace internal
-{
-template<typename T>
-constexpr auto always_false = false;
-
-template<typename T>
-constexpr auto to_type()
-{
-    if constexpr (std::is_same_v<T, std::uint8_t>) return u8;
-    else if constexpr (std::is_same_v<T, std::int16_t>) return s16;
-    else if constexpr (std::is_same_v<T, std::int32_t>) return s32;
-    else if constexpr (std::is_same_v<T, float>) return f32;
-    else static_assert(always_false<T>, "Incompatible sample type");
-}
-
-template<audio::type> struct from_type { };
-
-template<> struct from_type< u8> { using type = std::uint8_t; };
-template<> struct from_type<s16> { using type = std::int16_t; };
-template<> struct from_type<s24> { using type = std::int32_t; };
-template<> struct from_type<s32> { using type = std::int32_t; };
-template<> struct from_type<f32> { using type = float; };
-}
-
-template<typename T>
-constexpr auto type_v = internal::to_type<T>();
-
-template<audio::type A>
-using type_t = typename internal::from_type<A>::type;
 
 ////////////////////////////////////////////////////////////////////////////////
 /**

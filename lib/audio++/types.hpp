@@ -9,7 +9,9 @@
 #define AUDIO_TYPES_HPP
 
 ////////////////////////////////////////////////////////////////////////////////
-#include <cstddef> // std::size_t
+#include <cstdint>
+#include <stdexcept>
+#include <type_traits>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace audio
@@ -51,20 +53,58 @@ enum type : int
     u8, s16, s24, s32, f32,
 };
 
+namespace internal
+{
+template<typename T>
+constexpr auto always_false = false;
+
+template<typename T>
+constexpr auto T2type()
+{
+    if constexpr (std::is_same_v<T, std::uint8_t>) return u8;
+    else if constexpr (std::is_same_v<T, std::int16_t>) return s16;
+    else if constexpr (std::is_same_v<T, std::int32_t>) return s32;
+    else if constexpr (std::is_same_v<T, float>) return f32;
+    else static_assert(always_false<T>, "Bad sample type");
+}
+
+template<audio::type> struct type2T { };
+
+template<> struct type2T<u8 > { using type = std::uint8_t; };
+template<> struct type2T<s16> { using type = std::int16_t; };
+template<> struct type2T<s24> { using type = std::int32_t; };
+template<> struct type2T<s32> { using type = std::int32_t; };
+template<> struct type2T<f32> { using type = float; };
+}
+
+/**
+ * @var audio::type_v
+ * @brief Get audio::type value for a given type T.
+ */
+template<typename T>
+constexpr auto type_v = internal::T2type<T>();
+
+/**
+ * @typedef type_t
+ * @brief Get type T for a given audio::type value.
+ */
+template<audio::type A>
+using type_t = typename internal::type2T<A>::type;
+
 /**
  * @fn audio::size
- * @brief Get size (in bytes) of an audio::type.
+ * @brief Get size (in bytes) of an audio::type value.
  */
 constexpr std::size_t size(audio::type type)
 {
     switch (type)
     {
-        case  u8: return 1;
-        case s16: return 2;
-        case s24:
-        case s32:
-        case f32: return 4;
-        default : return 0;
+        case u8 : return sizeof(type_t<u8 >);
+        case s16: return sizeof(type_t<s16>);
+        case s24: return sizeof(type_t<s24>);
+        case s32: return sizeof(type_t<s32>);
+        case f32: return sizeof(type_t<f32>);
+        default : throw std::invalid_argument{"Bad audio type"};
     }
 }
 
@@ -73,7 +113,7 @@ constexpr std::size_t size(audio::type type)
  * @enum audio::frames
  * @brief Number of frames.
  */
-enum frames : long { };
+enum frames : std::uint64_t { };
 
 ////////////////////////////////////////////////////////////////////////////////
 }
