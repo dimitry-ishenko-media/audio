@@ -7,6 +7,7 @@ set(HEADERS
     audio++/mixer.hpp
     audio++/span.hpp
     audio++/types.hpp
+    audio++/vector.hpp
 )
 set(OVERALL_HEADER audio++.hpp)
 
