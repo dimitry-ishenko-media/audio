@@ -1,0 +1,5 @@
+usr/include/audio++/
+usr/include/audio++.hpp
+usr/lib/*/cmake/audio++/
+usr/lib/*/libaudio++.a
+usr/lib/*/libaudio++.so

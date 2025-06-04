@@ -1,0 +1,36 @@
+Source: audio++
+Section: sound
+Priority: optional
+Maintainer: Dimitry Ishenko <dimitry.ishenko@gmail.com>
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 12),
+ cmake,
+ libasound-dev,
+ libminiaudio-dev,
+Standards-Version: 4.6.2
+Homepage: https://github.com/dimitry-ishenko-sound/audio
+Vcs-Browser: https://github.com/dimitry-ishenko-sound/audio
+Vcs-Git: https://github.com/dimitry-ishenko-sound/audio
+
+Package: libaudio++
+Section: libs
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: audio++ – C++ audio library
+ audio++ is a C++ audio library that wraps around ALSA and miniaudio libraries.
+ .
+ This package contains the shared library.
+ 
+Package: libaudio++-dev
+Section: libdevel
+Architecture: any
+Depends:
+ ${misc:Depends},
+ libaudio++ (= ${binary:Version})
+Description: audio++ – C++ audio library
+ audio++ is a C++ audio library that wraps around ALSA and miniaudio libraries.
+ .
+ This package contains development files.
