@@ -1,5 +1,17 @@
-audio++ (0.1) UNRELEASED; urgency=medium
+audio++ (0.1) unstable; urgency=medium
 
-  * Initial release.
+  * Add packaging for Debian
+  * Update README
+  * Add bits for examples
+  * Add audio::converter
+  * Clean-up
+  * Simplify audio::span and audio::vector
+  * Add audio::vector
+  * Refactor
+  * Add audio::span class
+  * Add basic audio types
+  * Add bits for ALSA and miniaudio errors
+  * Import project skeleton
+  * Initial commit
 
- -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Wed, 04 Jun 2025 17:38:58 -0400
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Wed, 04 Jun 2025 18:47:40 -0400
