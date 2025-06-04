@@ -11,3 +11,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_definitions(-DVERSION="${PROJECT_VERSION}")
 
 add_subdirectory(lib)
+
+option(BUILD_EXAMPLES "Build examples" ON)
+if(BUILD_EXAMPLES)
+    add_subdirectory(example)
+endif()
