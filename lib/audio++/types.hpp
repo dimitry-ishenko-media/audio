@@ -104,16 +104,9 @@ constexpr std::size_t size(audio::type type)
         case s24: return sizeof(type_t<s24>);
         case s32: return sizeof(type_t<s32>);
         case f32: return sizeof(type_t<f32>);
-        default : throw std::invalid_argument{"Bad audio type"};
+        default : throw std::invalid_argument{"Bad sample type"};
     }
 }
-
-////////////////////////////////////////////////////////////////////////////////
-/**
- * @enum audio::frames
- * @brief Number of frames.
- */
-enum frames : std::uint64_t { };
 
 ////////////////////////////////////////////////////////////////////////////////
 }

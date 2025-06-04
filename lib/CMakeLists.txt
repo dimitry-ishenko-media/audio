@@ -4,7 +4,6 @@ find_package(ALSA REQUIRED)
 
 set(HEADERS
     audio++/error.hpp
-    audio++/mixer.hpp
     audio++/span.hpp
     audio++/types.hpp
     audio++/vector.hpp
@@ -14,7 +13,6 @@ set(OVERALL_HEADER audio++.hpp)
 set(SOURCES
     error.cpp
     internal.cpp
-    mixer.cpp
 )
 
 ####################
