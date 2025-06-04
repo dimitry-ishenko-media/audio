@@ -13,6 +13,7 @@
 #include "audio++/types.hpp"
 
 #include <algorithm>
+#include <cstddef>
 #include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,9 +25,8 @@ class vector
 {
 public:
     ////////////////////
-    vector(audio::type type, frames count = frames{0}) : type_{type},
-        cont_(count * audio::size(type_))
-    { }
+    vector(audio::type type, std::size_t count = 0) : type_{type}, cont_(count * audio::size(type_)) { }
+
     explicit vector(audio::span span) : type_{span.type()} { append(span); }
 
     ////////////////////
@@ -34,38 +34,32 @@ public:
     constexpr auto value_size() const noexcept { return audio::size(type_); }
 
     constexpr auto size_bytes() const noexcept { return cont_.size(); }
-    constexpr auto size() const noexcept { return static_cast<frames>(size_bytes() / value_size()); }
+    constexpr auto size() const noexcept { return size_bytes() / value_size(); }
 
-    constexpr auto as_bytes() const noexcept { return cont_.data(); }
-    constexpr auto as_bytes() noexcept { return cont_.data(); }
-
-    template<audio::type A> // TODO: check A == type()
-    constexpr auto data() const noexcept { return static_cast<const type_t<A>*>(cont_.data()); }
-
-    template<audio::type A> // TODO: check A == type()
-    constexpr auto data() noexcept { return static_cast<type_t<A>*>(cont_.data()); }
+    constexpr auto data_bytes() const noexcept { return cont_.data(); }
+    constexpr auto data_bytes() noexcept { return cont_.data(); }
 
     ////////////////////
-    static constexpr auto npos = static_cast<frames>(-1);
+    static constexpr auto npos = static_cast<std::size_t>(-1);
 
-    auto span(frames from, frames count = npos)
+    auto span(std::size_t pos, std::size_t count = npos)
     {
-        from = std::min(from, size());
-        count = std::min(count, frames{size() - from});
-        return audio::span{type_, as_bytes() + from * value_size(), count};
+        pos = std::min(pos, size());
+        count = std::min(count, size() - pos);
+        return audio::span{type_, data_bytes() + pos * value_size(), count};
     }
 
     void append(audio::span span)
     {
         // TODO: check span.type() == type()
-        auto begin = span.as_bytes(), end = begin + span.size_bytes();
+        auto begin = span.data_bytes(), end = begin + span.size_bytes();
         cont_.insert(cont_.end(), begin, end);
     }
 
     void erase(audio::span span)
     {
         // TODO: check span belongs to this vector
-        auto from = cont_.begin() + (span.as_bytes() - cont_.data());
+        auto from = cont_.begin() + (span.data_bytes() - cont_.data());
         auto to = from + span.size_bytes();
         cont_.erase(from, to);
     }
@@ -73,7 +67,7 @@ public:
 private:
     ////////////////////
     audio::type type_;
-    std::vector<std::byte> cont_;
+    std::vector<char> cont_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
