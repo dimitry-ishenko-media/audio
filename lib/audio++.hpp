@@ -5,6 +5,7 @@
 // Distributed under the GNU GPL license. See the LICENSE.md file for details.
 
 ////////////////////////////////////////////////////////////////////////////////
+#include <audio++/converter.hpp>
 #include <audio++/error.hpp>
 #include <audio++/span.hpp>
 #include <audio++/types.hpp>
