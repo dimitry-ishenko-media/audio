@@ -30,8 +30,9 @@ public:
         switch (-ev) // ALSA errors are negative
         {
             case SND_ERROR_INCOMPATIBLE_VERSION: return std::errc::invalid_argument;
+#ifdef SND_ERROR_ALISP_NIL
             case SND_ERROR_ALISP_NIL: return std::errc::function_not_supported;
-
+#endif
             default: return std::system_category().default_error_condition(-ev);
         }
     }
