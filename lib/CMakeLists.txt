@@ -1,5 +1,8 @@
 # lib
 
+include(GNUInstallDirs)
+
+####################
 find_package(ALSA REQUIRED)
 
 set(HEADERS
@@ -18,34 +21,41 @@ set(SOURCES
     internal.hpp
 )
 
-####################
-include(GNUInstallDirs)
+set(DEPENDS ALSA::ALSA)
 
+####################
 set(name ${PROJECT_NAME})
 
 add_library(${name}_objects OBJECT ${HEADERS} ${SOURCES})
 set_target_properties(${name}_objects PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_include_directories(${name}_objects PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(${name}_objects PRIVATE ${DEPENDS})
 
+##
 add_library(${name}_static STATIC $<TARGET_OBJECTS:${name}_objects>)
 set_target_properties(${name}_static PROPERTIES
     OUTPUT_NAME ${name}
 )
+target_include_directories(${name}_static INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+target_link_libraries(${name}_static INTERFACE ${DEPENDS})
 
+##
 add_library(${name}_shared SHARED $<TARGET_OBJECTS:${name}_objects>)
 set_target_properties(${name}_shared PROPERTIES
     OUTPUT_NAME ${name}
     VERSION     ${PROJECT_VERSION}
     SOVERSION   ${PROJECT_VERSION_MAJOR}
 )
+target_include_directories(${name}_shared INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+target_link_libraries(${name}_shared PRIVATE ${DEPENDS})
 
-foreach(target ${name}_objects ${name}_static ${name}_shared)
-    target_include_directories(${target} PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-    )
-    target_link_libraries(${target} PUBLIC ALSA::ALSA)
-endforeach()
-
+##
 add_library(${name}::${name}_static ALIAS ${name}_static)
 add_library(${name}::${name}_shared ALIAS ${name}_shared)
 add_library(${name}::${name} ALIAS ${name}_shared)
