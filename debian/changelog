@@ -1,3 +1,11 @@
+audio++ (0.2) unstable; urgency=medium
+
+  * Update CMake files
+  * Fix compilation on some distros
+  * Map errors to std::errc conditions
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Fri, 06 Jun 2025 15:52:38 -0400
+
 audio++ (0.1) unstable; urgency=medium
 
   * Add packaging for Debian
