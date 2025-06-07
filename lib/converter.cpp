@@ -59,7 +59,7 @@ vector converter::process(audio::span data_in)
 {
     if (data_in.type() != type_in_) throw mini_error{MA_INVALID_ARGS, "type mismatch"};
 
-    // append to unprocessed data from previous call
+    // append to unprocessed data from the previous call
     store_.append(data_in);
 
     auto converter = static_cast<ma_data_converter*>(converter_.get());
@@ -70,11 +70,14 @@ vector converter::process(audio::span data_in)
 
     audio::vector data_out{type_out_, count_out};
     
-    ev = ma_data_converter_process_pcm_frames(converter, store_.data_bytes(), &count_in, data_out.data_bytes(), &count_out);
+    ev = ma_data_converter_process_pcm_frames(converter,
+        store_.as_bytes().data(), &count_in,
+        data_out.as_bytes().data(), &count_out
+    );
     if (ev != MA_SUCCESS) throw mini_error{ev, "ma_converter_process_pcm_frames()"};
 
-    // remove processed data
-    store_.erase(store_.span(0, count_in));
+    // store unprocessed data
+    store_ = vector{store_.span(count_in, store_.npos)};
 
     return data_out;
 }

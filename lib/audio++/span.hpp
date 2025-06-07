@@ -16,6 +16,7 @@
 #include <iterator>
 #include <memory> // std::to_address
 #include <ranges>
+#include <span>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace audio
@@ -30,8 +31,12 @@ class span
 {
 public:
     ////////////////////
-    constexpr span(audio::type type, const void* p, std::size_t count) : type_{type},
-        data_{static_cast<const char*>(p)}, size_{count}
+    constexpr span(audio::type type, const void* p, std::size_t count) :
+        span{type, const_cast<void*>(p), count}
+    { }
+
+    constexpr span(audio::type type, void* p, std::size_t count) :
+        type_{type}, data_{static_cast<char*>(p)}, size_{count}
     { }
 
     template<std::contiguous_iterator Iter>
@@ -58,13 +63,13 @@ public:
     constexpr auto size() const noexcept { return size_; }
     constexpr auto size_bytes() const noexcept { return size() * value_size(); }
 
-    constexpr auto data_bytes() const noexcept { return data_; }
-    constexpr auto data_bytes() noexcept { return const_cast<char*>(data_); }
+    constexpr auto as_bytes() const noexcept { return std::span{ data_, size_bytes() }; }
+    constexpr auto as_bytes() noexcept { return std::span{ data_, size_bytes() }; }
 
 private:
     ////////////////////
     audio::type type_;
-    const char* data_;
+    char* data_;
     std::size_t size_;
 };
 
