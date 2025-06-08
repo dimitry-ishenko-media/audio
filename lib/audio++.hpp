@@ -6,6 +6,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 #include <audio++/converter.hpp>
+#include <audio++/device.hpp>
 #include <audio++/error.hpp>
 #include <audio++/params.hpp>
 #include <audio++/span.hpp>

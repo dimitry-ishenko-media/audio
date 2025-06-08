@@ -7,6 +7,7 @@ find_package(ALSA REQUIRED)
 
 set(HEADERS
     audio++/converter.hpp
+    audio++/device.hpp
     audio++/error.hpp
     audio++/params.hpp
     audio++/span.hpp
@@ -17,6 +18,7 @@ set(OVERALL_HEADER audio++.hpp)
 
 set(SOURCES
     converter.cpp
+    device.cpp
     error.cpp
     internal.cpp
     internal.hpp

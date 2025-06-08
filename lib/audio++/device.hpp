@@ -1,0 +1,71 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2025 Dimitry Ishenko
+// Contact: dimitry (dot) ishenko (at) (gee) mail (dot) com
+//
+// Distributed under the GNU GPL license. See the LICENSE.md file for details.
+
+////////////////////////////////////////////////////////////////////////////////
+#ifndef AUDIO_DEVICE_HPP
+#define AUDIO_DEVICE_HPP
+
+////////////////////////////////////////////////////////////////////////////////
+#include "audio++/params.hpp"
+#include "audio++/types.hpp"
+
+#include <memory>
+#include <string>
+#include <string_view>
+
+struct _snd_pcm;
+using snd_pcm_t = _snd_pcm;
+
+////////////////////////////////////////////////////////////////////////////////
+namespace audio
+{
+
+////////////////////////////////////////////////////////////////////////////////
+class device
+{
+public:
+    ////////////////////
+    auto get_params() { return params{&*pcm_}; }
+
+protected:
+    ////////////////////
+    device(std::string_view name, int stream, int mode);
+    device(card c, int stream, int mode) : device{"hw:" + std::to_string(c), stream, mode} { }
+
+private:
+    ////////////////////
+    std::unique_ptr<snd_pcm_t, int(*)(snd_pcm_t*)> pcm_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class capture : public device
+{
+public:
+    ////////////////////
+    explicit capture(std::string_view name);
+    explicit capture(card);
+
+    capture(std::string_view name, nonblock_t);
+    capture(card, nonblock_t);
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class playback : public device
+{
+public:
+    ////////////////////
+    explicit playback(std::string_view name);
+    explicit playback(card);
+
+    playback(std::string_view name, nonblock_t);
+    playback(card, nonblock_t);
+};
+
+////////////////////////////////////////////////////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////
+#endif
