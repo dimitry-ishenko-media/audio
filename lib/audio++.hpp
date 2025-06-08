@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <audio++/converter.hpp>
 #include <audio++/error.hpp>
+#include <audio++/params.hpp>
 #include <audio++/span.hpp>
 #include <audio++/types.hpp>
 #include <audio++/vector.hpp>

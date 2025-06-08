@@ -8,6 +8,7 @@ find_package(ALSA REQUIRED)
 set(HEADERS
     audio++/converter.hpp
     audio++/error.hpp
+    audio++/params.hpp
     audio++/span.hpp
     audio++/types.hpp
     audio++/vector.hpp
@@ -19,6 +20,7 @@ set(SOURCES
     error.cpp
     internal.cpp
     internal.hpp
+    params.cpp
 )
 
 set(DEPENDS ALSA::ALSA)
