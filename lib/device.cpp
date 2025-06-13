@@ -30,7 +30,7 @@ auto pcm_open_helper(std::string_view name, int stream, int mode)
 
 ////////////////////////////////////////////////////////////////////////////////
 device::device(std::string name, int stream, int mode) :
-    pcm_{ pcm_open_helper(name, stream, mode), &snd_pcm_close }, name_{std::move(name)}
+    pcm_{ pcm_open_helper(name, stream, mode), &snd_pcm_close }, name_{std::move(name)}, params_{&*pcm_}
 { }
 
 ////////////////////////////////////////////////////////////////////////////////

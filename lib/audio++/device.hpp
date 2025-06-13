@@ -27,8 +27,8 @@ class device
 {
 public:
     ////////////////////
-    auto get_params() { return params{&*pcm_}; }
     auto&& name() const noexcept { return name_; }
+    auto&& params() const noexcept { return params_; }
 
 protected:
     ////////////////////
@@ -39,6 +39,7 @@ private:
     ////////////////////
     std::unique_ptr<snd_pcm_t, int(*)(snd_pcm_t*)> pcm_;
     std::string name_;
+    audio::params params_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
