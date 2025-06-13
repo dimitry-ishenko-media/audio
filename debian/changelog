@@ -1,3 +1,15 @@
+audio++ (0.4) unstable; urgency=medium
+
+  * audio::alsa_error: tweak
+  * audio::device: store params instance
+  * audio::device: store device name
+  * Add bits for audio::device class
+  * Add bits for audio::params class
+  * Add audio::nonblock tag
+  * Add audio::card type
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Fri, 13 Jun 2025 15:17:20 -0400
+
 audio++ (0.3) unstable; urgency=medium
 
   * Clean up span and vector interfaces
