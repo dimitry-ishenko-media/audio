@@ -29,22 +29,22 @@ auto pcm_open_helper(std::string_view name, int stream, int mode)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-device::device(std::string_view name, int stream, int mode) :
-    pcm_{ pcm_open_helper(name, stream, mode), &snd_pcm_close }
+device::device(std::string name, int stream, int mode) :
+    pcm_{ pcm_open_helper(name, stream, mode), &snd_pcm_close }, name_{std::move(name)}
 { }
 
 ////////////////////////////////////////////////////////////////////////////////
-capture::capture(std::string_view name) : device{name, SND_PCM_STREAM_CAPTURE, 0} { }
+capture::capture(std::string name) : device{std::move(name), SND_PCM_STREAM_CAPTURE, 0} { }
 capture::capture(card c) : device{c, SND_PCM_STREAM_CAPTURE, 0} { }
 
-capture::capture(std::string_view name, nonblock_t) : device{name, SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK} { }
+capture::capture(std::string name, nonblock_t) : device{std::move(name), SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK} { }
 capture::capture(card c, nonblock_t) : device{c, SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK} { }
 
 ////////////////////////////////////////////////////////////////////////////////
-playback::playback(std::string_view name) : device{name, SND_PCM_STREAM_PLAYBACK, 0} { }
+playback::playback(std::string name) : device{std::move(name), SND_PCM_STREAM_PLAYBACK, 0} { }
 playback::playback(card c) : device{c, SND_PCM_STREAM_PLAYBACK, 0} { }
 
-playback::playback(std::string_view name, nonblock_t) : device{name, SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK} { }
+playback::playback(std::string name, nonblock_t) : device{std::move(name), SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK} { }
 playback::playback(card c, nonblock_t) : device{c, SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK} { }
 
 ////////////////////////////////////////////////////////////////////////////////
