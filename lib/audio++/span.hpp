@@ -11,11 +11,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "audio++/types.hpp"
 
-#include <array>
 #include <cstddef>
-#include <iterator>
-#include <memory> // std::to_address
-#include <ranges>
 #include <span>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,29 +28,8 @@ class span
 public:
     ////////////////////
     constexpr span(audio::type type, const void* p, std::size_t count) :
-        span{type, const_cast<void*>(p), count}
+        type_{type}, data_{static_cast<char*>(const_cast<void*>(p))}, size_{count}
     { }
-
-    constexpr span(audio::type type, void* p, std::size_t count) :
-        type_{type}, data_{static_cast<char*>(p)}, size_{count}
-    { }
-
-    template<std::contiguous_iterator Iter>
-    constexpr span(Iter iter, std::size_t count) :
-        span{type_v<std::iter_value_t<Iter>>, std::to_address(iter), count}
-    { }
-
-    template<std::contiguous_iterator Iter>
-    constexpr span(Iter from, Iter to) : span{from, to - from} { }
-
-    template<typename T, std::size_t C>
-    constexpr span(T (&array)[C]) : span{std::data(array), C} { }
-
-    template<typename T, std::size_t C>
-    constexpr span(std::array<T, C>& array) : span{std::data(array), C} { }
-
-    template<std::ranges::contiguous_range R>
-    constexpr span(const R& range) : span{std::ranges::data(range), std::ranges::size(range)} { }
 
     ////////////////////
     constexpr auto type() const noexcept { return type_; }

@@ -20,13 +20,13 @@ namespace audio
 ////////////////////////////////////////////////////////////////////////////////
 struct converter_options
 {
-    audio::type type_in;
-    audio::channels chan_in;
-    audio::rate rate_in;
+    audio::type  type_in;
+    audio::chans chan_in;
+    audio::rate  rate_in;
 
-    audio::type type_out;
-    audio::channels chan_out;
-    audio::rate rate_out;
+    audio::type  type_out;
+    audio::chans chan_out;
+    audio::rate  rate_out;
 };
 
 class converter
