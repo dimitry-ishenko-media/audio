@@ -1,3 +1,10 @@
+audio++ (0.5) unstable; urgency=medium
+
+  * Use audio::format in span and vector
+  * Simplify basic types
+
+ -- Dimitry Ishenko <dimitry.ishenko@gmail.com>  Fri, 20 Jun 2025 15:56:10 -0400
+
 audio++ (0.4) unstable; urgency=medium
 
   * audio::alsa_error: tweak
