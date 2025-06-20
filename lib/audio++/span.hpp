@@ -27,23 +27,23 @@ class span
 {
 public:
     ////////////////////
-    constexpr span(audio::type type, const void* p, std::size_t count) :
-        type_{type}, data_{static_cast<char*>(const_cast<void*>(p))}, size_{count}
+    constexpr span(audio::format fmt, const void* data, std::size_t count) :
+        fmt_{fmt}, data_{static_cast<char*>(const_cast<void*>(data))}, size_{count}
     { }
 
     ////////////////////
-    constexpr auto type() const noexcept { return type_; }
-    constexpr auto value_size() const noexcept { return audio::size(type_); }
+    constexpr auto&& format() const noexcept { return fmt_; }
+    constexpr auto frame_size() const noexcept { return fmt_.size(); }
 
     constexpr auto size() const noexcept { return size_; }
-    constexpr auto size_bytes() const noexcept { return size() * value_size(); }
+    constexpr auto size_bytes() const noexcept { return size() * frame_size(); }
 
     constexpr auto as_bytes() const noexcept { return std::span{ data_, size_bytes() }; }
     constexpr auto as_bytes() noexcept { return std::span{ data_, size_bytes() }; }
 
 private:
     ////////////////////
-    audio::type type_;
+    audio::format fmt_;
     char* data_;
     std::size_t size_;
 };

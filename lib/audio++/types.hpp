@@ -88,6 +88,23 @@ constexpr std::size_t size(audio::type type) noexcept
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
+ * @struct audio::format
+ * @brief Audio format (count of channels, sample rate and sample type).
+ */
+struct format
+{
+    audio::chans chans;
+    audio::rate rate;
+    audio::type type;
+
+    ////////////////////
+    constexpr std::size_t size() const noexcept { return chans * audio::size(type); }
+
+    constexpr bool operator==(const format&) const noexcept = default;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+/**
  * @enum audio::card
  * @brief Audio card number.
  */

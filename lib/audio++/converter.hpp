@@ -13,6 +13,8 @@
 #include "audio++/types.hpp"
 #include "audio++/vector.hpp"
 
+#include <memory>
+
 ////////////////////////////////////////////////////////////////////////////////
 namespace audio
 {
@@ -20,13 +22,7 @@ namespace audio
 ////////////////////////////////////////////////////////////////////////////////
 struct converter_options
 {
-    audio::type  type_in;
-    audio::chans chan_in;
-    audio::rate  rate_in;
-
-    audio::type  type_out;
-    audio::chans chan_out;
-    audio::rate  rate_out;
+    audio::format in, out;
 };
 
 class converter
@@ -43,7 +39,7 @@ private:
     // so we can't forward-declare it and have to use void*
     std::unique_ptr<void, void (*)(void*)> converter_;
 
-    audio::type type_in_, type_out_;
+    audio::format fmt_in_, fmt_out_;
     audio::vector store_;
 };
 

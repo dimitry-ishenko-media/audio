@@ -9,6 +9,7 @@
 #include "audio++/error.hpp"
 #include "internal.hpp" // audio::to_ma_format
 
+#include <cassert>
 #include <miniaudio.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -22,12 +23,12 @@ namespace
 auto converter_create_helper(const converter_options& options)
 {
     auto config = ma_data_converter_config_init(
-        to_ma_format(options.type_in),
-        to_ma_format(options.type_out),
-        options.chan_in,
-        options.chan_out,
-        options.rate_in,
-        options.rate_out
+        to_ma_format(options.in.type),
+        to_ma_format(options.out.type),
+        options.in.chans,
+        options.out.chans,
+        options.in.rate,
+        options.out.rate
     );
 
     auto converter = new ma_data_converter;
@@ -51,13 +52,13 @@ void converter_destroy_helper(void* p)
 ////////////////////////////////////////////////////////////////////////////////
 converter::converter(const converter_options& options) :
     converter_{ converter_create_helper(options), &converter_destroy_helper },
-    type_in_{options.type_in}, type_out_{options.type_out}, store_{options.type_in}
+    fmt_in_{options.in}, fmt_out_{options.out}, store_{options.in}
 { }
 
 ////////////////////////////////////////////////////////////////////////////////
 vector converter::process(audio::span data_in)
 {
-    if (data_in.type() != type_in_) throw mini_error{MA_INVALID_ARGS, "type mismatch"};
+    assert(data_in.format() == fmt_in_);
 
     // append to unprocessed data from the previous call
     store_.append(data_in);
@@ -68,7 +69,7 @@ vector converter::process(audio::span data_in)
     auto ev = ma_data_converter_get_expected_output_frame_count(converter, count_in, &count_out);
     if (ev != MA_SUCCESS) throw mini_error{ev, "ma_data_converter_get_expected_output_frame_count()"};
 
-    audio::vector data_out{type_out_, count_out};
+    audio::vector data_out{fmt_out_, count_out};
     
     ev = ma_data_converter_process_pcm_frames(converter,
         store_.as_bytes().data(), &count_in,
